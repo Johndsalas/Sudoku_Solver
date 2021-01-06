@@ -3,7 +3,7 @@ This program takes in an unsolved Sudoku board and returns the solved version of
 '''
 
 # save unsolved board as list of lists
-board = [
+sudoku = [
             [0,0,2,0,0,0,4,0,0],
             [0,0,0,4,0,2,8,0,0],
             [0,9,0,0,7,0,0,0,2],
@@ -16,24 +16,40 @@ board = [
         ]
 
 # print unsolved board
-for i in range(len(board)):
 
-    if (i % 3 == 0) and (i != 0):
+def print_board(board):
+    '''
+    Prints unsolved Sedoku board from list of list of numbers
+    '''
+    
+    # itterate through each row number
+    for i in range(len(board)):
 
-        print("- - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+        # for each row number if it is divisable by three and is not zero print dividing line
+        if (i % 3 == 0) and (i != 0):
 
-    for j in range(len(board[0])):
+            # print dividing line
+            print("- - - - - - - - - -")
 
-        if (j % 3 == 0) and (j != 0):
+        # itterate through each column number
+        for j in range(len(board[0])):
 
-            print(" | ", end = "")
+            # for each row number if it is divisable by three and is not zero
+            if (j % 3 == 0) and (j != 0):
 
-        if j == 8:
+                # print 'pipe' and stay on the same line
+                print("|", end = "")
 
-            print(board[i][j], end ="")
+            # if the cloumn number is the last number in the row
+            if j == 8:
 
-        else:
+                # print the number located at borard[row_number][column_number] 
+                print(board[i][j])
 
-            print(str(board[i][j]) + ' ', end = "")
+            # other wise print the number located at borard[row_number][column_number] stay on the current line
+            else:
+
+                print(str(board[i][j]) + ' ', end = "")
 
 
+print_board(sudoku)
