@@ -65,5 +65,43 @@ def get_empty(board):
             if board[i][j] == 0:
                 return (i,j) # (row,column)
 
-get_empty(sudoku)
-    
+def valid(board, number, pos):
+    '''
+    Verifies if a given number is a valid entry for a given position on the current sudoku board
+    '''
+
+    # check row
+    # examines a (row, column) pair.
+    # itterates through each row in the named column
+    # checks if the value in each row matches the value in the named row
+    # returns False if any of the values match
+    for j in range(len(board[0])):
+
+        if board[j][pos[0]] == number and pos[0] != j:
+
+            return False
+
+    # check column
+    # examines a (row, column) pair.
+    # itterates through each column in the named row
+    # checks if the value in each column matches the value in the named column
+    # returns False if any of the values match
+    for i in range(len(board)):
+
+        if board[pos[0]][i] == number and pos[1] != i:
+
+            return False
+
+    # check box
+    # gets x and y coordinate for box a (row, column) position is in 
+    box_x = pos[1] // 3
+    box_y = pos[0] // 3
+
+    # itterates through values in the box and returns false if and of the values match a specified value 
+    for i in range(box_y * 3, (box_y * 3) + 3):
+
+        for j in range(box_x * 3, (box_x * 3) + 3):
+
+            if board[i][j] == number and (i,j) != pos:
+
+                return False
