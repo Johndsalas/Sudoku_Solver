@@ -43,7 +43,7 @@ def print_board(board):
             # if the cloumn number is the last number in the row
             if j == 8:
 
-                # print the number located at borard[row_number][column_number] 
+                # print the number located at borard[row_number][column_number]
                 print(board[i][j])
 
             # other wise print the number located at borard[row_number][column_number] stay on the current line
@@ -51,5 +51,19 @@ def print_board(board):
 
                 print(str(board[i][j]) + ' ', end = "")
 
+def get_empty(board):
+    '''
+    Get next empty space on the board
+    '''
 
-print_board(sudoku)
+    # itterate through each row number and each column number
+    for i in range(len(sudoku)):
+        for j in range(len(sudoku[0])):
+
+            # if the position of the row and column has a value of 0 (an empty space on the board)
+            # return a tuple with the row and column number
+            if board[i][j] == 0:
+                return (i,j) # (row,column)
+
+get_empty(sudoku)
+    
