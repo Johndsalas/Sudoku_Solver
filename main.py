@@ -1,8 +1,9 @@
 '''
-This program takes in an unsolved Sudoku board and returns the solved version of that board.
+program for solving a sudoku board
 '''
 
-# save unsolved board as list of lists
+# input unsolved Sedoku board as a list containing a list of numbers for each row in the board
+# use 0 for blank spaces
 board = [
             [0,0,2,0,0,0,4,0,0],
             [0,0,0,4,0,2,8,0,0],
@@ -16,139 +17,189 @@ board = [
         ]
 
 # print board
-def print_board(bo):
+def print_board(board):
     '''
-    Prints Sedoku board from list of list of numbers
+    Takes in a list of nine lists of nine numbers each 
+    Outputs the numbers as a human readable Sedoku board
     '''
     
-    # itterate through each row number
-    for i in range(len(bo)):
+    # for each list of numbers in board
+    for i in range(len(board)):
 
-        # for each row number if it is divisable by three and is not zero print dividing line
+        # if it is divisable by three and is not zero print dividing line
         if (i % 3 == 0) and (i != 0):
 
             # print dividing line
             print("- - - - - - - - - -")
 
-        # itterate through each column number
-        for j in range(len(bo[0])):
+        # Then for each number in the list of numbers
+        for j in range(len(board[0])):
 
-            # for each row number if it is divisable by three and is not zero
+            # if it is divisable by three and is not zero
             if (j % 3 == 0) and (j != 0):
 
                 # print 'pipe' and stay on the same line
                 print("|", end = "")
 
-            # if the cloumn number is the last number in the row
+            # if it is the last nuber in the row
             if j == 8:
 
-                # print the number located at borard[row_number][column_number]
-                print(bo[i][j])
+                # print the number and go to the next line
+                print(board[i][j])
 
             # other wise print the number located at borard[row_number][column_number] stay on the current line
             else:
 
-                print(str(bo[i][j]) + ' ', end = "")
+                print(str(board[i][j]) + ' ', end = "")
 
-def find_empty(bo):
+def find_empty(board):
     '''
-    Get next empty space on the board
+    Takes in a computer readable Sedoku board
+    returns the coordenents of the first blank space on that board (represented by a 0)
     '''
+    # for each list of numbers
+    for i in range(len(board)):
 
-    # itterate through each row number and each column number
-    for i in range(len(bo)):
-        for j in range(len(bo[0])):
+        # look through the numbers in each position in the list
+        for j in range(len(board[0])):
 
-            # if the position of the row and column has a value of 0 (an empty space on the board)
-            # return a tuple with the row and column number
-            if bo[i][j] == 0:
-                return (i,j) # (row,column)
+            # if the number in the number is 0 
+            if board[i][j] == 0:
 
+                # return it's coordinates
+                return (i,j)
+
+    # if no 0' are found return false
     return False
 
-def valid(bo, num, pos):
+def valid(board, number, position):
     '''
-    Verifies if a given number is a valid entry for a given position on the current sudoku board
+    Takes in a computer readable Sedoku board, a number, and a position on the Sedoku board expressed as a tuple (row, column)
+    return true if the number can legally be placed on the board (no matching number in the same square, row, or column)
+    return false otherwise
     '''
 
-    # check row
-    # itterates through each other position in the row
-    # returns false if there are any matches
-    for i in range(len(bo[0])):
+    # check's position's row to see if there is a number that matches the input number
+   
+    # for each position 
+    for i in range(len(board[0])):
 
-        if bo[pos[0]][i] == num and pos[1] != i:
 
+        # in the same row of numbers as the input number if the number in that position is equal to the input number and is not in the input position
+        if board[position[0]][i] == number and position[1] != i:
+
+            # return false
             return False
     
-    # check column
-    # itterates through each other position in the column
-    # returns false if there are any matches
-    for i in range(len(bo)):
+    # check's position's column to see if there is a number that matches the input number
 
-        if bo[i][pos[1]] == num and pos[0] != i:
+    # for each position
+    for i in range(len(board)):
 
+        # in the same column of numbers as the input number if the number in that position is equal to the input number and is not in the input position
+        if board[i][position[1]] == number and position[0] != i:
+
+            #return false
             return False
 
-    # check box
-    # gets x and y coordinate for box a (row, column) position is in
-    box_x = pos[1] // 3
-    box_y = pos[0] // 3
 
-    # itterates through values in the box and returns false if and of the values match a specified value
-    for i in range(box_y * 3, (box_y * 3) + 3):
+    # check position's square to see if there is a number that matches the input number 
 
-        for j in range(box_x * 3, (box_x * 3) + 3):
+    # find the correct square to check
 
-            if board[i][j] == num and (i,j) != pos:
+    # intiger divide both input coordinants by three to get the position of the sqare on a human readable sedoku board
 
+    # 00 01 02
+    # 10 11 12
+    # 20 21 22
+
+    box_x = position[0] // 3 
+    box_y = position[1] // 3
+
+    # multiply those position numbers by 3 to get the coordanents of the upper right position of that square in the machine readable sedoku board
+    # 00 03 06
+    # 30 33 36
+    # 60 63 66
+
+    ur_x = box_x * 3
+    ur_y = box_y * 3
+
+
+    # for each row in the box
+    for i in range(ur_x, ur_x + 3):
+
+        # look through the numbers in each position in the box
+        for j in range(ur_y, ur_y + 3):
+
+            # if the number in that position is equal to the input number and is not in the input position
+            if board[i][j] == number and (i,j) != position:
+
+                # return false
                 return False
 
     return True
 
-def solve(bo):
+def solve(board):
     '''
-    Solve a sudoku board
+    Takes in a machine readable Sudoku board and modifies the global variables of that board to create a solved vertion of that board
     '''
 
     # get position of the first empty place on the board
-    # or return True if there are no empty places remaining
-    find = find_empty(bo)
+    find = find_empty(board)
+
+    # if there are no empty spaces return true to close recursion loop
     if not find:
 
         return True
 
+    # otherwise begin/continue recursion loop
     else:
 
         row, col = find
 
-    # itterate through all possible values for position (1-9)
+    # beginning at one, itterate through all possible numbers that can be placed in a Sudoku board, for each number
     for i in range(1,10):
 
-        # if a value can be legally placed at the given position do so
-        # otherwise move to the next value
-        if valid(bo, i, (row, col)):
+        # if that number can be legally placed in the open position
+        if valid(board, i, (row, col)):
 
-            bo[row][col] = i
+            # place that number in the open position
+            board[row][col] = i
 
             # if calling solve again results no correct values
             # set the current position to a value to zero
             # continue itterating through i values untill a new legal value is found
             # put that value in the current position
-            if solve(bo):
+
+            # call solve on board to find the next empty space and place a new number 
+            if solve(board):
+
+                # if there are no empty spaces remaining return True
                 return True
 
-            bo[row][col] = 0
+            # if the next call of solve loops through all 10 possible numbers and does not find a legal placement
+            # reset the number placed in this call of solve to 0
+            board[row][col] = 0
 
+    # if no number can be legally placed return false
     return False
 
-def make_it_happen(bo):
+def make_it_happen(board):
     '''
-    Prints out unsolved and solved vertion of sudoku board
+    takes in a global object that is a machine readable sudoku board 
+    prints a human readable copy of the board
+    modifies that object to create a solved version of the machine readable board
+    then prints a human readable copy of the solved version
     '''
-    print_board(bo)
-    solve(bo)
-    print('')
-    print('')
-    print_board(bo)
 
-make_it_happen(board)
+    print()
+    print_board(board)
+    solve(board)
+    print()
+    print()
+    print_board(board)
+    print()
+
+if __name__ == "__main__":  
+
+    make_it_happen(board)
